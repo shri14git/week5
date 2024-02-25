@@ -1,0 +1,53 @@
+const { MongoClient } = require('mongodb');
+
+// Connection URI
+const uri = 'mongodb://localhost:27017';
+
+// Database Name
+const dbName = 'student_database';
+
+// Create a new MongoClient
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+async function main() {
+    try {
+        // Connect the client to the server
+        await client.connect();
+        console.log('Connected to MongoDB server');
+
+        // Get the database
+        const db = client.db(dbName);
+
+        // Insert sample academic record
+        await db.collection('academic_records').insertOne({
+            student_id: 1,
+            name: "John Doe",
+            grade: "A",
+            subjects: ["Math", "Science", "History"],
+            marks: {
+                math: 85,
+                science: 78,
+                history: 92
+            }
+        });
+        console.log('Inserted sample academic record');
+
+        // Insert sample co-curricular activity record
+        await db.collection('co_curricular_activities').insertOne({
+            student_id: 1,
+            name: "John Doe",
+            activities: ["Football", "Debate Club", "Chess Club"]
+        });
+        console.log('Inserted sample co-curricular activity record');
+
+    } catch (error) {
+        console.error('Error:', error);
+    } finally {
+        // Close the connection when finished
+        await client.close();
+        console.log('Connection closed');
+    }
+}
+
+// Run the main function
+main();
